@@ -1,43 +1,22 @@
-import Dependencies._
+import AssemblyKeys._ 
 
-ThisBuild / scalaVersion     := "2.11.8"
-ThisBuild / version          := "0.1.0-SNAPSHOT"
-ThisBuild / organization     := "com.projects.aruikar"
-ThisBuild / organizationName := "aruikar"
+name := "Stream-ordering-app"
 
-lazy val root = (project in file("."))
-  .settings(
-    name := "Fish&Chips",
-    libraryDependencies += scalaTest % Test,
-    libraryDependencies += "org.apache.spark" %% "spark-sql" % "2.3.3",
-    libraryDependencies += "org.apache.spark" % "spark-streaming_2.11" % "2.3.3",
-    libraryDependencies += "org.apache.spark" % "spark-streaming-kafka-0-10_2.11" % "2.3.3"
-  )
+scalaVersion := "2.11.8"
 
-// Uncomment the following for publishing to Sonatype.
-// See https://www.scala-sbt.org/1.x/docs/Using-Sonatype.html for more detail.
+libraryDependencies ++= Seq(
+  "org.apache.spark" %% "spark-streaming" % "2.3.3" % "provided",
+  "org.apache.spark" %% "spark-streaming-kafka-0-10" % "2.3.0"
+)
 
-// ThisBuild / description := "Some descripiton about your project."
-// ThisBuild / licenses    := List("Apache 2" -> new URL("http://www.apache.org/licenses/LICENSE-2.0.txt"))
-// ThisBuild / homepage    := Some(url("https://github.com/example/project"))
-// ThisBuild / scmInfo := Some(
-//   ScmInfo(
-//     url("https://github.com/your-account/your-project"),
-//     "scm:git@github.com:your-account/your-project.git"
-//   )
-// )
-// ThisBuild / developers := List(
-//   Developer(
-//     id    = "Your identifier",
-//     name  = "Your Name",
-//     email = "your@email",
-//     url   = url("http://your.url")
-//   )
-// )
-// ThisBuild / pomIncludeRepository := { _ => false }
-// ThisBuild / publishTo := {
-//   val nexus = "https://oss.sonatype.org/"
-//   if (isSnapshot.value) Some("snapshots" at nexus + "content/repositories/snapshots")
-//   else Some("releases" at nexus + "service/local/staging/deploy/maven2")
-// }
-// ThisBuild / publishMavenStyle := true
+assemblySettings
+
+mergeStrategy in assembly := {
+  case m if m.toLowerCase.endsWith("manifest.mf")          => MergeStrategy.discard
+  case m if m.toLowerCase.matches("meta-inf.*\\.sf$")      => MergeStrategy.discard
+  case "log4j.properties"                                  => MergeStrategy.discard
+  case m if m.toLowerCase.startsWith("meta-inf/services/") => MergeStrategy.filterDistinctLines
+  case "reference.conf"                                    => MergeStrategy.concat
+  case _                                                   => MergeStrategy.first
+}
+
