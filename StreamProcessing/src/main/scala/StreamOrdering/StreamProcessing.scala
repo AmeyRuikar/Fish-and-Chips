@@ -37,7 +37,7 @@ object StreamProcessing {
     ssc.awaitTermination()
   }
 
-  def parseRecords(rec: String) {
+  def parseRecords(rec: String):(String, (String, String, String)) = {
     val parts = rec.split("""\|""")
     return (parts(1), (parts(0), parts(1), parts(2)))
   }
