@@ -1,0 +1,4 @@
+target/scala-2.11/classes
+target/scala-2.11/resolution-cache
+project/target
+target/streams
