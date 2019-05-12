@@ -5,7 +5,7 @@ import threading
 
 from kafka import KafkaProducer
 
-#producer = KafkaProducer(bootstrap_servers=['localhost:9092'], value_serializer=lambda x: x.encode('utf-8'))
+producer = KafkaProducer(bootstrap_servers=['localhost:9092'], value_serializer=lambda x: x.encode('utf-8'))
 
 separator = '|'
 order_n = 0
@@ -15,8 +15,8 @@ def emit_message(sleep_time, order_number, item, count):
     sleep(sleep_time)
 
     rec = separator.join([str(int(float(time.time()) * 1000)), str(order_number), item, str(count)])
-    print(rec)
-    #producer.send('fish-n-chips-orders', rec)
+    #print(rec)
+    producer.send('fish-n-chips-orders', rec)
 
     return
 

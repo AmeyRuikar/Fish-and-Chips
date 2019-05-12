@@ -9,7 +9,9 @@ lazy val root = (project in file("."))
   .settings(
     name := "Fish&Chips",
     libraryDependencies += scalaTest % Test,
-    libraryDependencies += "org.apache.spark" %% "spark-sql" % "2.3.3"
+    libraryDependencies += "org.apache.spark" %% "spark-sql" % "2.3.3",
+    libraryDependencies += "org.apache.spark" % "spark-streaming_2.11" % "2.3.3",
+    libraryDependencies += "org.apache.spark" % "spark-streaming-kafka-0-10_2.11" % "2.3.3"
   )
 
 // Uncomment the following for publishing to Sonatype.
