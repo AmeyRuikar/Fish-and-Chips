@@ -5,7 +5,7 @@ In this example, I'm `stream processing` food orders. An order of Fish-and-chips
 Once each of the kitchen is ready with their parts of the order, they will emit a `message` in our system. Our goal here is to process the order only when ***both*** the parts are ready for a given `order_id`. 
 
 The `message` will be in the following format:
-> (timestamp, order_id, item, portions) -> (1557640618000, 4311, fish, 2)
+> timestamp|order_id|item|portions -> 1557640618000|4311|fish|2
 
 And this data would be flowing over a `Kafka` topic. 
 
