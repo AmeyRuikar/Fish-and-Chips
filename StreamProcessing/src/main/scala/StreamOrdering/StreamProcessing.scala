@@ -19,6 +19,7 @@ object StreamProcessing {
                           "auto.offset.reset" -> "latest",
                           "key.deserializer" -> classOf[StringDeserializer],
                           "value.deserializer" -> classOf[StringDeserializer],
+                          "group.id" -> "ordering_1",
                           "enable.auto.commit" -> (false: java.lang.Boolean))
 
     val topics = Array("fish-n-chips-orders")
