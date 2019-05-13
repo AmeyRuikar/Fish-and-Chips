@@ -51,7 +51,8 @@ object StreamProcessing {
     if(item == null) {
       return (key, false)
     }
-    val prevState = state.get()
+    val prevState = state.getOption.getOrElse((false, false))
+
 
     if(prevState == (false, false)) {
       // state does not exist
