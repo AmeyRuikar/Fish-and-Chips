@@ -13,6 +13,7 @@ object StreamProcessing {
 
     val conf = new SparkConf().setAppName("Fish-n-Chips app")
     val ssc = new StreamingContext(conf, Seconds(30))
+    ssc.checkpoint("./fish-n-chips-ordering-checkpoint")
 
     val kafkaParams = Map[String, Object](
                           "bootstrap.servers" -> "localhost:9092,",
@@ -45,34 +46,35 @@ object StreamProcessing {
 
   def mappingFunc(key: String, newItem: Option[String], state: State[(Boolean, Boolean)]): (String, Boolean) = {
 
-      val item = newItem.getOrElse(null)
-            if(item == null) {
-              return (key, false)
-            }
-            val prevState = state.get()
+    val item = newItem.getOrElse(null)
 
-            if(prevState == (false, false)) {
-              // state does not exist
-              if (item.equals("fish")) {
-                state.update((true, false))
-              }
-              else {
-                state.update((false, true))
-              }
-              return (key, false)
+    if(item == null) {
+      return (key, false)
+    }
+    val prevState = state.get()
 
-            }
-            else {
-              // state exists
-              if((item.equals("fish") && prevState == (false, true) ) || (item.equals("chips") && prevState == (true, false)) ) {
-                state.remove()
-                return (key, true)
-              }
-              else {
-                  return (key, false)
-              }
+    if(prevState == (false, false)) {
+      // state does not exist
+      if (item.equals("fish")) {
+        state.update((true, false))
+      }
+      else {
+        state.update((false, true))
+      }
+      return (key, false)
 
-            }
+    }
+    else {
+      // state exists
+      if((item.equals("fish") && prevState == (false, true) ) || (item.equals("chips") && prevState == (true, false)) ) {
+        state.remove()
+        return (key, true)
+      }
+      else {
+          return (key, false)
+      }
+
+    }
 
   }
 
