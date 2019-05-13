@@ -32,11 +32,11 @@ object StreamProcessing {
     recordsRDD.print()
 
     val recByOrderId = recordsRDD.map(parseRecords)
-    recByOrderId.print()
+    //recByOrderId.print()
 
     val readyOrders = recByOrderId.mapWithState(
       StateSpec.function(mappingFunc _)
-    ).filter(x => x._2 != true)
+    ).filter(x => x._2 == true)
     
     readyOrders.print()
 
